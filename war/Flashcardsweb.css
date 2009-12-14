@@ -1,0 +1,88 @@
+/** Add css rules here for your application. */
+
+
+.sendButton {
+  display: block;
+  font-size: 16pt;
+}
+
+/** Most GWT widgets already have a style name defined */
+.gwt-DialogBox {
+  width: 400px;
+}
+
+.dialogVPanel {
+  margin: 5px;
+}
+
+.serverResponseLabelError {
+  color: red;
+}
+
+/** Set ids using widget.getElement().setId("idOfElement") */
+#closeButton {
+  margin: 15px 6px 6px;
+}
+
+.gwt-Hyperlink {
+	white-space: nowrap;	
+}
+
+.gwt-Hyperlink-Selected {
+	background: #92c1f0
+}
+
+.gwt-Label-ClickToEdit {
+	border-width: 1px;
+	border-style: solid;
+	border-color: transparent;
+}
+
+.gwt-Label-ClickToEditHover {
+	border-style: solid;
+	border-width: 1px;
+	border-color: #d0d0d0;
+	background-color: #ffffe0;
+}
+
+.gwt-Hyperlink-LeftNav {
+	border-style: solid;
+	border-color: transparent;
+	border-left-width: 15px;
+	border-right-width: 15px;
+}
+
+.gwt-Label-CardQuestion {
+	font-family: STKaiti, sans-serif;
+	font-size: 80pt;
+}
+
+.gwt-Label-CardAnswer {
+	font-family: STKaiti, sans-serif;
+	font-size: 14pt;
+}
+
+.gwt-Label-CardCounter {
+	color: #808080;
+	white-space: nowrap;
+	border-style: solid;
+	border-color: transparent;
+	border-left-width: 15px;
+	border-right-width: 15px;	
+}
+
+.gwt-DockPanel-Flashcard {
+	border-style: solid;
+	border-color: #000000;
+	border-width: 1px;
+}
+
+.statusLabel-loading {
+	background: #FFFF7D7;
+	color: #000000;
+}
+
+.statusLabel-error {
+	color: #ffffff;
+	background: #EE0000;
+}
