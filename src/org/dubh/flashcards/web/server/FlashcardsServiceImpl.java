@@ -93,8 +93,10 @@ public class FlashcardsServiceImpl extends RemoteServiceServlet
   public Card createNewCard(String deckName) {
     Card card = new Card();
     card.setEnglish("English");
-    card.setPinyin("pīnyīn");
+    card.setPinyin("p\u012Bny\u012Bn");
     card.setHanzi("\u6C49\u5B57");
+    
+    System.out.println("Created card " + card);
     
     PersistenceManager pm = PMF.get().getPersistenceManager();
     try {
