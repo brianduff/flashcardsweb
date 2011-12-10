@@ -25,17 +25,17 @@ public class Trainer extends Composite {
   private final Button next = new Button("Next");
   private final Button reveal = new Button("Reveal Answer");
   private final Label cardCounter = new Label();
-    
+
   private List<Card> cards;
   private List<CardAndCategory> history;
   private Category questionCategory;
   private Dealer dealer;
   private int index = -1;
-  
+
   Trainer() {
     initWidget(focusPanel);
     focusPanel.add(mainPanel);
-    
+
     HorizontalPanel buttonBar = new HorizontalPanel();
     buttonBar.add(reveal);
     HTML gap = new HTML("<div />");
@@ -44,7 +44,7 @@ public class Trainer extends Composite {
     buttonBar.add(previous);
     buttonBar.add(next);
     buttonBar.add(cardCounter);
-    
+
     cardCounter.addStyleDependentName("CardCounter");
 
     reveal.addClickHandler(new ClickHandler() {
@@ -52,27 +52,27 @@ public class Trainer extends Composite {
         cardViewer.setAnswerVisible(true);
       }
     });
-    
+
     mainPanel.add(buttonBar);
-    
+
     focusPanel.addKeyPressHandler(new KeyPressHandler() {
       public void onKeyPress(KeyPressEvent event) {
         switch (event.getCharCode()) {
         case ' ':
           cardViewer.setAnswerVisible(true);
           break;
-        case 'j': 
+        case 'j':
           previousCard();
           break;
         case 'k':
           nextCard();
           break;
         }
-      }      
+      }
     });
-    
+
     questionCategory = null;
-    
+
     HorizontalPanel questionCategoryPanel = new HorizontalPanel();
     questionCategoryPanel.add(new Label("Question category:"));
     RadioButton randomButton = new RadioButton("questionCategory", "Random");
@@ -82,9 +82,10 @@ public class Trainer extends Composite {
       }
     });
     questionCategoryPanel.add(randomButton);
-    
+
     for (final Category category : Category.values()) {
-      final RadioButton button = new RadioButton("questionCategory", category.getName());
+      final RadioButton button = new RadioButton("questionCategory",
+          category.getName());
       button.addClickHandler(new ClickHandler() {
         public void onClick(ClickEvent event) {
           if (button.getValue()) {
@@ -94,16 +95,16 @@ public class Trainer extends Composite {
       });
       questionCategoryPanel.add(button);
     }
-    
+
     DisclosurePanel options = new DisclosurePanel("Options");
     options.setAnimationEnabled(true);
     options.setContent(questionCategoryPanel);
-    
+
     mainPanel.add(options);
     mainPanel.add(cardViewer);
     next.setEnabled(false);
     previous.setEnabled(false);
-    
+
     previous.addClickHandler(new ClickHandler() {
       public void onClick(ClickEvent event) {
         previousCard();
@@ -115,7 +116,7 @@ public class Trainer extends Composite {
       }
     });
   }
-  
+
   public void setCards(List<Card> cards) {
     this.cards = cards;
     dealer = new Dealer(cards);
@@ -130,11 +131,12 @@ public class Trainer extends Composite {
       cardCounter.setText("No cards in this deck. Add some using the Edit tab");
     }
   }
-  
+
   private void nextCard() {
     CardAndCategory card;
     if (index == history.size() - 1) {
-      card = new CardAndCategory(dealer.deal(), questionCategory == null ? Category.random() : questionCategory);
+      card = new CardAndCategory(dealer.deal(),
+          questionCategory == null ? Category.random() : questionCategory);
       history.add(card);
     } else {
       card = history.get(index + 1);
@@ -147,10 +149,10 @@ public class Trainer extends Composite {
   }
 
   private void updateCardCounter(Category category) {
-    cardCounter.setText(((index % cards.size()) + 1) + "/" + cards.size() + " - " + 
-        category.getName());
+    cardCounter.setText(((index % cards.size()) + 1) + "/" + cards.size()
+        + " - " + category.getName());
   }
-  
+
   private void previousCard() {
     if (index > 0) {
       CardAndCategory newCard = history.get(--index);

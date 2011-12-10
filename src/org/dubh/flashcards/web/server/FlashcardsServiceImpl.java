@@ -15,14 +15,15 @@ import com.google.appengine.repackaged.com.google.common.collect.Lists;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings("serial")
-public class FlashcardsServiceImpl extends RemoteServiceServlet
-    implements FlashcardsService {
-  
+public class FlashcardsServiceImpl extends RemoteServiceServlet implements
+    FlashcardsService {
+
   public String createNewDeck() {
     PersistenceManager pm = PMF.get().getPersistenceManager();
     try {
-      Query query = pm.newQuery("SELECT FROM org.dubh.flashcards.web.server.Deck " +
-          "WHERE name.startsWith(\"Untitled\")");
+      Query query = pm
+          .newQuery("SELECT FROM org.dubh.flashcards.web.server.Deck "
+              + "WHERE name.startsWith(\"Untitled\")");
       List<?> results = (List<?>) query.execute();
       int highestNumber = 1;
       for (Object result : results) {
@@ -42,7 +43,7 @@ public class FlashcardsServiceImpl extends RemoteServiceServlet
       Deck newDeck = new Deck();
       newDeck.setName(deckName);
       pm.makePersistent(newDeck);
-      
+
       return deckName;
     } finally {
       pm.close();
@@ -50,7 +51,7 @@ public class FlashcardsServiceImpl extends RemoteServiceServlet
   }
 
   public Collection<String> getAllDeckNames() {
-    
+
     List<String> deckNames = Lists.newArrayList();
     PersistenceManager pm = PMF.get().getPersistenceManager();
     try {
@@ -62,7 +63,7 @@ public class FlashcardsServiceImpl extends RemoteServiceServlet
     }
     return deckNames;
   }
-  
+
   public void renameDeck(String oldName, String newName) {
     PersistenceManager pm = PMF.get().getPersistenceManager();
     try {
@@ -76,12 +77,13 @@ public class FlashcardsServiceImpl extends RemoteServiceServlet
       pm.close();
     }
   }
-  
+
   private Deck findDeck(PersistenceManager pm, String deckName) {
     // TODO(bduff) possibly vulnerable to sql injection...
-    Query findOld = pm.newQuery("SELECT FROM org.dubh.flashcards.web.server.Deck " + 
-        "WHERE name == \"" + deckName + "\"");
-    List<?> results  = (List<?>) findOld.execute();
+    Query findOld = pm
+        .newQuery("SELECT FROM org.dubh.flashcards.web.server.Deck "
+            + "WHERE name == \"" + deckName + "\"");
+    List<?> results = (List<?>) findOld.execute();
     if (results.size() == 1) {
       Deck deck = (Deck) results.get(0);
       return deck;
@@ -94,9 +96,9 @@ public class FlashcardsServiceImpl extends RemoteServiceServlet
     card.setEnglish("English");
     card.setPinyin("p\u012Bny\u012Bn");
     card.setHanzi("\u6C49\u5B57");
-    
+
     System.out.println("Created card " + card);
-    
+
     PersistenceManager pm = PMF.get().getPersistenceManager();
     try {
       Deck deck = findDeck(pm, deckName);

@@ -21,7 +21,8 @@ import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class DeckEditor extends Composite implements HasValueChangeHandlers<List<Card>> {
+public class DeckEditor extends Composite implements
+    HasValueChangeHandlers<List<Card>> {
 
   private final VerticalPanel mainPanel;
   private final TextBox nameBox;
@@ -33,30 +34,31 @@ public class DeckEditor extends Composite implements HasValueChangeHandlers<List
   private FlexTable cardsTable;
   private List<Card> cards;
   private final StatusIndicator statusIndicator;
-  
+
   private static final Runnable doNothing = new Runnable() {
 
     public void run() {
       // TODO Auto-generated method stub
-      
+
     }
-    
+
   };
-  
-  DeckEditor(Flashcardsweb main, FlashcardsServiceAsync service, StatusIndicator statusIndicator) {
+
+  DeckEditor(Flashcardsweb main, FlashcardsServiceAsync service,
+      StatusIndicator statusIndicator) {
     this.main = main;
     this.service = service;
     this.statusIndicator = statusIndicator;
     mainPanel = new VerticalPanel();
     initWidget(mainPanel);
-    
+
     HorizontalPanel namePanel = new HorizontalPanel();
     namePanel.add(new HTML("Deck Name:"));
     nameBox = new TextBox();
     namePanel.add(nameBox);
-    
+
     mainPanel.add(namePanel);
-    
+
     nameBox.addChangeHandler(new ChangeHandler() {
       public void onChange(ChangeEvent e) {
         if (!adjustingDeckName) {
@@ -64,22 +66,22 @@ public class DeckEditor extends Composite implements HasValueChangeHandlers<List
         }
       }
     });
-    
+
     Button createNew = new Button("New Card");
     mainPanel.add(createNew);
-    
+
     createNew.addClickHandler(new ClickHandler() {
       public void onClick(ClickEvent event) {
         createNewCard();
       }
     });
-    
+
   }
-  
+
   private void createNewCard() {
     createNewCard(doNothing);
   }
-  
+
   private void createNewCard(final Runnable stuffToDoAfterSuccess) {
     statusIndicator.startLoading();
     service.createNewCard(currentDeckName, new AsyncCallback<Card>() {
@@ -96,10 +98,10 @@ public class DeckEditor extends Composite implements HasValueChangeHandlers<List
         stuffToDoAfterSuccess.run();
         statusIndicator.stopLoading();
       }
-      
+
     });
   }
-  
+
   private void applyNameChange(final String newName) {
     if (currentDeckLink != null) {
       statusIndicator.startLoading();
@@ -115,11 +117,11 @@ public class DeckEditor extends Composite implements HasValueChangeHandlers<List
           History.newItem(newName);
           statusIndicator.stopLoading();
         }
-        
+
       });
     }
   }
-  
+
   public void deckSelected(String deckName, Hyperlink deckLink) {
     try {
       statusIndicator.startLoading();
@@ -150,14 +152,13 @@ public class DeckEditor extends Composite implements HasValueChangeHandlers<List
           }
           statusIndicator.stopLoading();
         }
-        
+
       });
-      
+
     } finally {
       adjustingDeckName = false;
     }
   }
-
 
   private void addCard(int row, final Card card) {
     Button delete = new Button("Remove");
@@ -178,11 +179,10 @@ public class DeckEditor extends Composite implements HasValueChangeHandlers<List
             statusIndicator.stopLoading();
           }
         });
-      }      
+      }
     });
     cardsTable.setWidget(row, 0, delete);
-    
-    
+
     final ClickToEditWidget hanzi = new ClickToEditWidget(card.getHanzi());
     final ClickToEditWidget pinyin = new ClickToEditWidget(card.getPinyin());
     final ClickToEditWidget english = new ClickToEditWidget(card.getEnglish());
@@ -190,7 +190,7 @@ public class DeckEditor extends Composite implements HasValueChangeHandlers<List
     hanzi.addValueChangeHandler(new ValueChangeHandler<String>() {
       public void onValueChange(ValueChangeEvent<String> event) {
         card.setHanzi(event.getValue());
-        updateCard(card);        
+        updateCard(card);
         pinyin.setEditing(true);
       }
     });
@@ -209,24 +209,23 @@ public class DeckEditor extends Composite implements HasValueChangeHandlers<List
         updateCard(card);
         int index = cards.indexOf(card);
         if (index >= 0 && index < cardsTable.getRowCount() - 1) {
-          ClickToEditWidget widget = (ClickToEditWidget) 
-            cardsTable.getWidget(index+1, 1);     
+          ClickToEditWidget widget = (ClickToEditWidget) cardsTable.getWidget(
+              index + 1, 1);
           widget.setEditing(true);
-        } else {          
+        } else {
           createNewCard(new Runnable() {
             public void run() {
-              ClickToEditWidget widget = (ClickToEditWidget) 
-                cardsTable.getWidget(cardsTable.getRowCount() - 1, 1);
+              ClickToEditWidget widget = (ClickToEditWidget) cardsTable
+                  .getWidget(cardsTable.getRowCount() - 1, 1);
               widget.setEditing(true);
             }
           });
         }
       }
-    });    
+    });
     cardsTable.setWidget(row, 3, english);
   }
-  
-  
+
   private void updateCard(Card card) {
     statusIndicator.startLoading();
     service.updateCard(card, new AsyncCallback<Void>() {
@@ -238,11 +237,12 @@ public class DeckEditor extends Composite implements HasValueChangeHandlers<List
       public void onSuccess(Void result) {
         statusIndicator.stopLoading();
       }
-      
+
     });
   }
-  
-  public HandlerRegistration addValueChangeHandler(ValueChangeHandler<List<Card>> handler) {    
+
+  public HandlerRegistration addValueChangeHandler(
+      ValueChangeHandler<List<Card>> handler) {
     return addHandler(handler, ValueChangeEvent.getType());
   }
 

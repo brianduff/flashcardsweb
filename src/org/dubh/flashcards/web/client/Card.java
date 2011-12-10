@@ -9,35 +9,35 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-
 /**
  * Represents a single flashcard, which consists of english, hanzi and pinyin
  * text.
+ * 
  * @author bduff
  */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Card implements Serializable {
-  
+
   private static final long serialVersionUID = -8505739952332378078L;
 
   @PrimaryKey
   @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-  @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
+  @Extension(vendorName = "datanucleus", key = "gae.encoded-pk", value = "true")
   private String key;
-  
+
   @Persistent
   private String hanzi;
-  
+
   public Card() {
-    
+
   }
-  
+
   public Card(String english, String pinyin, String hanzi) {
     setEnglish(english);
     setPinyin(pinyin);
     setHanzi(hanzi);
   }
-  
+
   @Override
   public String toString() {
     return "Card [english=" + english + ", hanzi=" + hanzi + ", pinyin="
@@ -83,28 +83,28 @@ public class Card implements Serializable {
 
   @Persistent
   private String english;
-  
+
   @Persistent
   private String pinyin;
 
   @Persistent
   private int englishRight;
-  
+
   @Persistent
   private int englishWrong;
-  
+
   @Persistent
   private int pinyinRight;
-  
+
   @Persistent
   private int pinyinWrong;
-  
+
   @Persistent
   private int hanziRight;
-  
+
   @Persistent
   private int hanziWrong;
-  
+
   public String getHanzi() {
     return hanzi;
   }
@@ -128,11 +128,11 @@ public class Card implements Serializable {
   public void setPinyin(String pinyin) {
     this.pinyin = pinyin;
   }
-  
+
   public String getKey() {
     return key;
   }
-  
+
   public void guessedRight(Category category) {
     switch (category) {
     case HANZI:
@@ -160,7 +160,5 @@ public class Card implements Serializable {
       break;
     }
   }
-  
-  
 
 }

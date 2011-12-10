@@ -11,18 +11,17 @@ import javax.jdo.annotations.PrimaryKey;
 
 import org.dubh.flashcards.web.client.Card;
 
-
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Deck {
-   
+
   @PrimaryKey
   @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-  @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
+  @Extension(vendorName = "datanucleus", key = "gae.encoded-pk", value = "true")
   private String key;
-  
+
   @Persistent
   private String name;
-  
+
   @Persistent
   private List<Card> cards;
 

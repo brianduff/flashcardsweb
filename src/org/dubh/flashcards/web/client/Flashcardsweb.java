@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.TabPanel;
  */
 public class Flashcardsweb implements EntryPoint {
   FlashcardsServiceAsync service = GWT.create(FlashcardsService.class);
-  
+
   private HorizontalPanel mainPanel;
   private FlowPanel navigator;
   private Hyperlink createNewDeck;
@@ -39,75 +39,75 @@ public class Flashcardsweb implements EntryPoint {
   private DeckEditor deckEditor;
   private Trainer trainer;
   private StatusIndicator statusIndicator;
-  
-	/**
-	 * This is the entry point method.
-	 */
-	public void onModuleLoad() {
-	  statusIndicator = new StatusIndicator("statusMessage");
-	  statusIndicator.startLoading();
-	  try {
-  	  mainPanel = new HorizontalPanel();
-  	  mainPanel.setVerticalAlignment(DockPanel.ALIGN_TOP);
-  	  mainPanel.setWidth("100%");
-  	  mainPanel.setSpacing(0);
-  	  
-  	  navigator = new FlowPanel();	 
-  	  mainPanel.add(navigator);
-  
-  	  createNewDeck = new Hyperlink("New Deck", "createNew");
-  	  createNewDeck.addClickHandler(new ClickHandler() {
+
+  /**
+   * This is the entry point method.
+   */
+  public void onModuleLoad() {
+    statusIndicator = new StatusIndicator("statusMessage");
+    statusIndicator.startLoading();
+    try {
+      mainPanel = new HorizontalPanel();
+      mainPanel.setVerticalAlignment(DockPanel.ALIGN_TOP);
+      mainPanel.setWidth("100%");
+      mainPanel.setSpacing(0);
+
+      navigator = new FlowPanel();
+      mainPanel.add(navigator);
+
+      createNewDeck = new Hyperlink("New Deck", "createNew");
+      createNewDeck.addClickHandler(new ClickHandler() {
         public void onClick(ClickEvent event) {
           createNewDeck();
         }
-  	  });
-  	  updateNavigator();
-  	  	  
-  	  tabPanel = new TabPanel();
-  	  
-  	  trainer = new Trainer();
-  	  tabPanel.add(trainer, "Train");
-  	  tabPanel.setWidth("100%");
-  	  deckEditor = new DeckEditor(this, service, statusIndicator);
-  	  tabPanel.add(deckEditor, "Edit");
-  	  mainPanel.add(tabPanel);
-  	  
-  	  mainPanel.setCellWidth(tabPanel, "100%");
-  
+      });
+      updateNavigator();
+
+      tabPanel = new TabPanel();
+
+      trainer = new Trainer();
+      tabPanel.add(trainer, "Train");
+      tabPanel.setWidth("100%");
+      deckEditor = new DeckEditor(this, service, statusIndicator);
+      tabPanel.add(deckEditor, "Edit");
+      mainPanel.add(tabPanel);
+
+      mainPanel.setCellWidth(tabPanel, "100%");
+
       RootPanel.get().add(mainPanel);
-      
+
       ValueChangeHandler<String> historyHandler = new ValueChangeHandler<String>() {
         public void onValueChange(ValueChangeEvent<String> event) {
           selectDeck(event.getValue());
         }
-  
+
       };
       History.addValueChangeHandler(historyHandler);
-      
+
       // Make the "create new" link the same height as the tab bar so that
       // the first deck link starts below the tabbar.
       createNewDeck.setHeight(tabPanel.getTabBar().getOffsetHeight() + "px");
-      
+
       deckEditor.addValueChangeHandler(new ValueChangeHandler<List<Card>>() {
         public void onValueChange(ValueChangeEvent<List<Card>> event) {
           trainer.setCards(event.getValue());
         }
       });
-	  } finally {
-	    statusIndicator.stopLoading();
-	  }
-	}
-	
-	void updateLinkText(Hyperlink link, String newText) {
-	  String oldName = link.getText();
-	  hyperlinkNameToHyperlink.remove(link.getText());
-	  link.setText(newText);
-	  link.setTargetHistoryToken(newText);
-	  hyperlinkNameToHyperlink.put(link.getText(), link);
-	  sortedDeckNames.remove(oldName);
-	  navigator.remove(link);
-	  insertLinkAtCorrectPosition(link);
-	}
+    } finally {
+      statusIndicator.stopLoading();
+    }
+  }
+
+  void updateLinkText(Hyperlink link, String newText) {
+    String oldName = link.getText();
+    hyperlinkNameToHyperlink.remove(link.getText());
+    link.setText(newText);
+    link.setTargetHistoryToken(newText);
+    hyperlinkNameToHyperlink.put(link.getText(), link);
+    sortedDeckNames.remove(oldName);
+    navigator.remove(link);
+    insertLinkAtCorrectPosition(link);
+  }
 
   private void selectDeck(String name) {
     statusIndicator.startLoading();
@@ -131,44 +131,44 @@ public class Flashcardsweb implements EntryPoint {
           trainer.setCards(result);
           statusIndicator.stopLoading();
         }
-        
+
       });
     } else {
       tabPanel.setVisible(false);
     }
   }
-	
+
   private void updateNavigator() {
     statusIndicator.startLoading();
     navigator.clear();
     navigator.add(createNewDeck);
     service.getAllDeckNames(new AsyncCallback<Collection<String>>() {
-	    public void onFailure(Throwable caught) {
-	      statusIndicator.showErrorMessage("Failed to load");
-	    }
-	    
-	    public void onSuccess(Collection<String> deckNames) {
-	      sortedDeckNames = new ArrayList<String>();
-	      sortedDeckNames.addAll(deckNames);
-	      Collections.sort(sortedDeckNames);
-	      for (String deck : sortedDeckNames) {
-	        Hyperlink link = createDeckLink(deck);
-	        navigator.add(link);
-	        hyperlinkNameToHyperlink.put(deck, link);
-	      }
-	      selectDeck(History.getToken());
-	      statusIndicator.stopLoading();
-	    }
-	  });
+      public void onFailure(Throwable caught) {
+        statusIndicator.showErrorMessage("Failed to load");
+      }
+
+      public void onSuccess(Collection<String> deckNames) {
+        sortedDeckNames = new ArrayList<String>();
+        sortedDeckNames.addAll(deckNames);
+        Collections.sort(sortedDeckNames);
+        for (String deck : sortedDeckNames) {
+          Hyperlink link = createDeckLink(deck);
+          navigator.add(link);
+          hyperlinkNameToHyperlink.put(deck, link);
+        }
+        selectDeck(History.getToken());
+        statusIndicator.stopLoading();
+      }
+    });
   }
-  
+
   private void createNewDeck() {
     statusIndicator.startLoading();
     service.createNewDeck(new AsyncCallback<String>() {
       public void onFailure(Throwable caught) {
         statusIndicator.showErrorMessage("Failed to create new deck");
       }
-      
+
       public void onSuccess(String newDeckName) {
         Hyperlink newLink = createDeckLink(newDeckName);
         hyperlinkNameToHyperlink.put(newDeckName, newLink);
@@ -179,7 +179,7 @@ public class Flashcardsweb implements EntryPoint {
       }
     });
   }
-  
+
   private void insertLinkAtCorrectPosition(Hyperlink link) {
     // Find the right place to insert the new deck in the navigator.
     if (sortedDeckNames == null || sortedDeckNames.isEmpty()) {
@@ -190,10 +190,10 @@ public class Flashcardsweb implements EntryPoint {
       int position = Collections.binarySearch(sortedDeckNames, link.getText());
       if (position < 0) {
         position = -(position);
-      } 
+      }
       navigator.insert(link, position);
-      sortedDeckNames.add(position-1, link.getText());
-    }    
+      sortedDeckNames.add(position - 1, link.getText());
+    }
     DOM.scrollIntoView(link.getElement());
   }
 

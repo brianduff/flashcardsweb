@@ -17,31 +17,31 @@ public class StatusIndicator extends Composite {
       timerTick();
     }
   };
-  
+
   StatusIndicator(String divId) {
     initWidget(label);
-    
+
     RootPanel panel = RootPanel.get(divId);
     panel.add(this);
-    
-    //label.getElement().getStyle().setProperty("white-space", "nowrap");
+
+    // label.getElement().getStyle().setProperty("white-space", "nowrap");
     label.setStylePrimaryName("statusLabel");
   }
-  
+
   public void startLoading() {
     timer.cancel();
     label.setVisible(true);
     label.setText("Loading...");
     label.addStyleDependentName("loading");
   }
-  
+
   public void stopLoading() {
     timer.cancel();
     label.setText("");
     label.setVisible(false);
     label.removeStyleDependentName("loading");
   }
-  
+
   /**
    * Shows an error message for 7s.
    * 
@@ -49,12 +49,12 @@ public class StatusIndicator extends Composite {
    */
   public void showErrorMessage(String errorMessage) {
     timer.cancel();
-    
+
     label.setText(errorMessage);
     label.addStyleDependentName("error");
     timer.schedule(7000);
   }
-  
+
   private void timerTick() {
     label.setVisible(false);
     label.setText("");

@@ -13,7 +13,7 @@ import com.google.gwt.user.client.Random;
 public class Dealer {
   private final List<Card> shuffledDeck;
   private int dealtCount = 0;
-  
+
   Dealer(List<Card> deck) {
     shuffledDeck = new ArrayList<Card>(deck);
     shuffle();
@@ -30,7 +30,7 @@ public class Dealer {
       shuffledDeck.set(n, tmp);
     }
   }
-  
+
   public Card deal() {
     if (dealtCount == shuffledDeck.size()) {
       shuffle();
