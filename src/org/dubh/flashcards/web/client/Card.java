@@ -88,22 +88,22 @@ public class Card implements Serializable {
   private String pinyin;
 
   @Persistent
-  private int englishRight;
+  private Integer englishRight;
 
   @Persistent
-  private int englishWrong;
+  private Integer englishWrong;
 
   @Persistent
-  private int pinyinRight;
+  private Integer pinyinRight;
 
   @Persistent
-  private int pinyinWrong;
+  private Integer pinyinWrong;
 
   @Persistent
-  private int hanziRight;
+  private Integer hanziRight;
 
   @Persistent
-  private int hanziWrong;
+  private Integer hanziWrong;
 
   public String getHanzi() {
     return hanzi;
